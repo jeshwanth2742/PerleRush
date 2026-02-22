@@ -1,4 +1,19 @@
-// -------- Elements --------
+// ==============================
+// GLOBAL STATE (DECLARE FIRST)
+// ==============================
+
+let username = "";
+let score = 0;
+let timeLeft = 60;
+let timer = null;
+let hideTimeout = null;
+let gameStarted = false;
+let currentTarget = null;
+
+// ==============================
+// ELEMENTS
+// ==============================
+
 const loginScreen = document.getElementById("login-screen");
 const guidePopup = document.getElementById("guide-popup");
 const gameScreen = document.getElementById("game-screen");
@@ -20,50 +35,58 @@ const yourRankText = document.getElementById("your-rank");
 
 const footer = document.getElementById("game-footer");
 
-// -------- State --------
-let username = "";
-let score = 0;
-let timeLeft = 60;
-let timer;
-let hideTimeout;
-let gameStarted = false;
+// ==============================
+// TARGET TYPES
+// ==============================
 
-// -------- Targets --------
 const targets = [
   { img: "assets/one.png", score: 1, size: 70 },
   { img: "assets/two.png", score: 3, size: 50 },
   { img: "assets/three.png", score: -2, size: 65 }
 ];
 
-let currentTarget;
+// ==============================
+// START BUTTON
+// ==============================
 
-// -------- Start --------
 startBtn.onclick = () => {
-  username = usernameInput.value.trim();
-  if (!username) return alert("Enter username");
+  const enteredName = usernameInput.value.trim();
 
+  if (!enteredName) {
+    alert("Enter username");
+    return;
+  }
+
+  username = enteredName; // assign AFTER validation
   guidePopup.style.display = "flex";
 };
 
-// -------- Guide Confirm --------
+// ==============================
+// GUIDE CONFIRM
+// ==============================
+
 guideOkBtn.onclick = () => {
   guidePopup.style.display = "none";
   startGame();
 };
 
-// -------- Game Start --------
+// ==============================
+// START GAME
+// ==============================
+
 function startGame() {
   if (gameStarted) return;
   gameStarted = true;
 
-  // Hide footer when gameplay starts
   footer.classList.add("hide-footer");
 
   loginScreen.style.display = "none";
+  leaderboardScreen.style.display = "none";
   gameScreen.style.display = "flex";
 
   score = 0;
   timeLeft = 60;
+
   scoreDisplay.textContent = "Score: 0";
   timerDisplay.textContent = "Time: 60s";
 
@@ -72,12 +95,20 @@ function startGame() {
   timer = setInterval(() => {
     timeLeft--;
     timerDisplay.textContent = `Time: ${timeLeft}s`;
-    if (timeLeft <= 0) endGame();
+
+    if (timeLeft <= 0) {
+      endGame();
+    }
   }, 1000);
 }
 
-// -------- Target Movement --------
+// ==============================
+// MOVE TARGET
+// ==============================
+
 function moveTarget() {
+  if (timeLeft <= 0) return;
+
   currentTarget = targets[Math.floor(Math.random() * targets.length)];
 
   target.src = currentTarget.img;
@@ -86,20 +117,26 @@ function moveTarget() {
   target.style.display = "block";
 
   const area = gameArea.getBoundingClientRect();
+
   target.style.left =
     Math.random() * (area.width - currentTarget.size) + "px";
+
   target.style.top =
     Math.random() * (area.height - currentTarget.size) + "px";
 
   hideTimeout = setTimeout(() => {
     target.style.display = "none";
-    if (timeLeft > 0) moveTarget();
+    moveTarget();
   }, 800);
 }
 
-// -------- Target Click --------
+// ==============================
+// TARGET CLICK
+// ==============================
+
 target.onclick = (e) => {
   e.stopPropagation();
+  if (!currentTarget) return;
 
   score = Math.max(0, score + currentTarget.score);
   scoreDisplay.textContent = `Score: ${score}`;
@@ -108,45 +145,75 @@ target.onclick = (e) => {
   moveTarget();
 };
 
-// -------- End Game --------
+// ==============================
+// END GAME
+// ==============================
+
 function endGame() {
   clearInterval(timer);
   clearTimeout(hideTimeout);
 
+  gameStarted = false;
+  target.style.display = "none";
+
   gameScreen.style.display = "none";
   leaderboardScreen.style.display = "flex";
 
-  // Show footer again on leaderboard
   footer.classList.remove("hide-footer");
 
   saveScore();
 }
 
-// -------- Firebase --------
+// ==============================
+// SAVE SCORE
+// ==============================
+
 function saveScore() {
+  if (!username) return;
+
   const ref = db.collection("leaderboard").doc(username);
 
-  ref.get().then(doc => {
-    if (!doc.exists || score > doc.data().score) {
-      ref.set({ score });
-    }
-  }).finally(loadLeaderboard);
+  ref.get()
+    .then(doc => {
+      if (!doc.exists || score > doc.data().score) {
+        return ref.set({ score: score });
+      }
+    })
+    .then(() => {
+      loadLeaderboard();
+    })
+    .catch(error => {
+      console.error("Save error:", error);
+      leaderboardList.innerHTML = "<li>Permission error. Check Firestore rules.</li>";
+    });
 }
 
+// ==============================
+// LOAD LEADERBOARD
+// ==============================
+
 function loadLeaderboard() {
+  leaderboardList.innerHTML = "<li>Loading...</li>";
+
   db.collection("leaderboard")
     .orderBy("score", "desc")
     .get()
     .then(snapshot => {
       leaderboardList.innerHTML = "";
+
+      if (snapshot.empty) {
+        leaderboardList.innerHTML = "<li>No scores yet</li>";
+        return;
+      }
+
       let rank = 1;
 
       snapshot.forEach(doc => {
         const li = document.createElement("li");
         li.textContent = `${rank}. ${doc.id} - ${doc.data().score}`;
 
-        if (doc.id === username) {
-          li.style.color = "#0f0";
+        if (username && doc.id === username) {
+          li.style.color = "#00ffcc";
           personalBestText.textContent = `Your Best: ${doc.data().score}`;
           yourRankText.textContent = `Your Rank: ${rank}`;
         }
@@ -154,5 +221,10 @@ function loadLeaderboard() {
         leaderboardList.appendChild(li);
         rank++;
       });
+    })
+    .catch(error => {
+      console.error("Leaderboard load error:", error);
+      leaderboardList.innerHTML =
+        "<li>⚠ Missing index or permission error.</li>";
     });
 }
