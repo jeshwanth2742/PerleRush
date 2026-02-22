@@ -23,7 +23,30 @@ body {
   align-items: center;
   justify-content: center;
 }
+#leaderboard-screen {
+  display: flex;
+  flex-direction: column; /* 🔥 REQUIRED */
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+#leaderboard-list {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0;
+  color: #fff;
+  font-size: 16px;
+}
 
+#leaderboard-list li {
+  margin: 6px 0;
+}
+#personal-best,
+#your-rank {
+  font-size: 15px;
+  color: #7fffe9;
+  margin: 4px 0;
+}
 /* BUTTONS */
 button {
   padding: 12px 22px;
