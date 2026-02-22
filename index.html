@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>perlerush</title>
+
+  <!-- External CSS -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Firebase Compat SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+  apiKey: "AIzaSyAMp41-s_W5J94xAXEoqXfpHuLZ2rIDorU",
+  authDomain: "preepclicker.firebaseapp.com",
+  projectId: "preepclicker",
+  storageBucket: "preepclicker.firebasestorage.app",
+  messagingSenderId: "108481604",
+  appId: "1:108481604:web:911ba26426da6fac68c011",
+  measurementId: "G-FJLK5MYKJW"
+};
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+  </script>
+</head>
+
+<body>
+
+  <!-- LOGO -->
+  <div class="logo">
+    <img src="assets/logo.png" alt="Logo">
+    <span>PerleGames</span>
+  </div>
+
+  <!-- LOGIN SCREEN -->
+  <div id="login-screen" class="screen">
+    <h1>perlerush</h1>
+    <input id="username" placeholder="Enter username">
+    <button id="start-btn">Start Game</button>
+  </div>
+
+  <!-- GUIDE POPUP -->
+  <div id="guide-popup" class="popup" style="display:none;">
+    <div class="popup-content">
+      <h2>How to Play</h2>
+
+      <div class="rule">
+        <img src="assets/one.png" width="42">
+        <span>+1 Point</span>
+      </div>
+
+      <div class="rule">
+        <img src="assets/two.png" width="42">
+        <span>+3 Points</span>
+      </div>
+
+      <div class="rule">
+        <img src="assets/three.png" width="42">
+        <span>−2 Points</span>
+      </div>
+
+      <button id="guide-ok-btn">Got it! Start</button>
+    </div>
+  </div>
+
+  <!-- GAME SCREEN -->
+  <div id="game-screen" class="screen" style="display:none;">
+    <h2 id="timer">Time: 60s</h2>
+    <div id="game-area">
+      <img id="target">
+    </div>
+    <div id="score">Score: 0</div>
+  </div>
+
+  <!-- LEADERBOARD -->
+  <div id="leaderboard-screen" class="screen" style="display:none;">
+    <h2>Leaderboard</h2>
+    <p id="personal-best"></p>
+    <p id="your-rank"></p>
+    <ul id="leaderboard-list"></ul>
+    <button onclick="location.reload()">Play Again</button>
+  </div>
+
+  <!-- FOOTER -->
+  <footer id="game-footer" class="perle-footer">
+    <div class="footer-inner">
+
+      <div class="footer-block">
+        <p class="footer-label">Built by</p>
+        <a href="https://x.com/_Xiipher_" target="_blank" class="footer-btn primary">
+          @_Xiipher_
+        </a>
+      </div>
+
+      <div class="footer-block">
+        <h3>Perle Labs Contributor</h3>
+        <ul>
+          <li>AI Data Annotation</li>
+          <li>Beta Participation</li>
+          <li>Community Engagement</li>
+          <li>Web3 + AI Support</li>
+        </ul>
+      </div>
+
+      <div class="footer-block">
+        <p class="footer-label">Official</p>
+        <a href="https://x.com/PerleLabs" target="_blank" class="footer-btn secondary">
+          @PerleLabs
+        </a>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- GAME SCRIPT -->
+  <script src="script.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,181 @@
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: system-ui, sans-serif;
+}
+
+body {
+  background: radial-gradient(circle at top, #111, #000);
+  color: #fff;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* SCREENS */
+.screen {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* BUTTONS */
+button {
+  padding: 12px 22px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  background: linear-gradient(135deg, #00ffcc, #00bfff);
+  color: #000;
+}
+
+/* INPUT */
+input {
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  margin-bottom: 14px;
+  width: 220px;
+}
+
+/* LOGO */
+.logo {
+  position: fixed;
+  top: 14px;
+  left: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 100;
+}
+
+.logo img {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+}
+
+/* POPUP */
+.popup {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+}
+
+.popup-content {
+  background: #111;
+  padding: 24px;
+  border-radius: 14px;
+  width: 280px;
+  text-align: center;
+  box-shadow: 0 0 20px #00ffcc;
+}
+
+/* GAME AREA */
+#game-area {
+  position: relative;
+  width: 90vw;
+  max-width: 520px;
+  height: 60vh;
+  border: 2px dashed rgba(255,255,255,0.2);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+#target {
+  position: absolute;
+  cursor: pointer;
+  display: none;
+  border-radius: 50%;
+  box-shadow: 0 0 14px rgba(0,255,204,0.9);
+}
+
+/* ========================= */
+/* FOOTER */
+/* ========================= */
+
+.perle-footer {
+  margin-top: auto;
+  padding: 40px 20px;
+  background: linear-gradient(
+    135deg,
+    rgba(0,255,170,0.15),
+    rgba(0,150,255,0.15),
+    rgba(255,220,100,0.12)
+  );
+  backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.footer-inner {
+  max-width: 1100px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 30px;
+  text-align: center;
+}
+
+.footer-label {
+  font-size: 0.85rem;
+  opacity: 0.7;
+  margin-bottom: 8px;
+}
+
+.footer-block h3 {
+  margin-bottom: 12px;
+  background: linear-gradient(90deg, #6affd6, #6ecbff, #ffe27a);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.footer-block ul {
+  list-style: none;
+}
+
+.footer-block ul li {
+  font-size: 0.9rem;
+  opacity: 0.85;
+  margin: 6px 0;
+}
+
+/* Footer Buttons */
+.footer-btn {
+  display: inline-block;
+  padding: 10px 22px;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  text-decoration: none;
+  font-weight: 600;
+  transition: 0.25s ease;
+}
+
+.footer-btn.primary {
+  background: linear-gradient(90deg, #4affc1, #7cf7ff);
+  color: #001b14;
+}
+.hide-footer {
+  opacity: 0;
+  transform: translateY(40px);
+  pointer-events: none;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.footer-btn.secondary {
+  background: linear-gradient(90deg, #7cbcff, #ffe27a);
+  color: #00121c;
+}
+
+.footer-btn:hover {
+  transform: translateY(-2px) scale(1.05);
+}
