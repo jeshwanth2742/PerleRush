@@ -1,5 +1,5 @@
 // ==============================
-// GLOBAL STATE
+// GLOBAL STATE (DECLARE FIRST)
 // ==============================
 
 let username = "";
@@ -57,7 +57,7 @@ startBtn.onclick = () => {
     return;
   }
 
-  username = enteredName;
+  username = enteredName; // assign AFTER validation
   guidePopup.style.display = "flex";
 };
 
@@ -184,8 +184,7 @@ function saveScore() {
     })
     .catch(error => {
       console.error("Save error:", error);
-      leaderboardList.innerHTML =
-        "<li>⚠ Permission error. Check Firestore rules.</li>";
+      leaderboardList.innerHTML = "<li>Permission error. Check Firestore rules.</li>";
     });
 }
 
@@ -208,7 +207,6 @@ function loadLeaderboard() {
       }
 
       let rank = 1;
-      let foundUser = false;
 
       snapshot.forEach(doc => {
         const li = document.createElement("li");
@@ -218,17 +216,11 @@ function loadLeaderboard() {
           li.style.color = "#00ffcc";
           personalBestText.textContent = `Your Best: ${doc.data().score}`;
           yourRankText.textContent = `Your Rank: ${rank}`;
-          foundUser = true;
         }
 
         leaderboardList.appendChild(li);
         rank++;
       });
-
-      if (!foundUser) {
-        personalBestText.textContent = "";
-        yourRankText.textContent = "";
-      }
     })
     .catch(error => {
       console.error("Leaderboard load error:", error);
